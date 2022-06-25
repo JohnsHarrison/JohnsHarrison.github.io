@@ -5,10 +5,11 @@ body{
 position:relative;
 margin: auto;
 height: 560px;
-width: 728px;
+width: 720px;
 background-image: url(images/background.jpeg);
 background-repeat: no-repeat;
-background-size: 728px 560px;
+background-size: 720px 560px;
+overflow: hidden;
 }
 
 #player{
@@ -29,5 +30,15 @@ background-size: 728px 560px;
     height: 50px;
     background: url(images/zombie.png);
     background-size: 50px 50px;
+    
 }
 
+
+.arrow{
+    position: absolute;
+    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    background: url(images/arrow.png);
+    background-size: 50px 50px;
+}
