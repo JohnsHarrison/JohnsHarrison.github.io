@@ -1,16 +1,24 @@
+function playGame(){
 const player = document.getElementById('player')
 const border = document.getElementById('border')
+let score = 0
+let speed = 300
+let level = 1
 
+//set player controls
 window.addEventListener('keydown', (e) => {
-    const left = parseInt(window.getComputedStyle(player).getPropertyValue('left'))
+  
+    const left = parseInt(window.getComputedStyle(player).getPropertyValue('left')) // save the players "left" value so it can be used to move
     switch (e.key) {
         case 'ArrowLeft':
+          //keep player from going off the left of the screen
             if(left > 0){
             // console.log('left pressed')
             player.style.left = left - 5 + 'px'
             }
             break;
         case 'ArrowRight':
+          //keep player from going off the right of the screen
             if(left < 680){
             // console.log('right pressed')
             player.style.left = left + 5 + 'px';
@@ -25,29 +33,52 @@ window.addEventListener('keydown', (e) => {
            const enemies = document.getElementsByClassName('enemy')
            for (let i = 0; i < enemies.length; i++) {
             let enemy = enemies[i];
-            if(enemy != undefined){
+
+            //get enemy amd arrow position
               const enemyHit = enemy.getBoundingClientRect();
               const arrowHit = arrow.getBoundingClientRect();
-              console.log(`enemy box is`)
-                console.log(enemyHit)
-                console.log(`arrow box is`)
-                console.log(arrowHit)
+
+              //if enemy position is the same as arrow enemy is head
               if (
                 arrowHit.left == enemyHit.left &&
                 arrowHit.right == enemyHit.right &&
                 arrowHit.top == enemyHit.top &&
                 arrowHit.bottom == enemyHit.bottom
               ) {
-                console.log(`enemy box is`)
-                console.log(enemyHit)
-                console.log(`arrow box is`)
-                console.log(arrowHit)
+
                 enemy.parentElement.removeChild(enemy);
-                //Scoreboard
-                document.getElementById("points").innerHTML =
-                  parseInt(document.getElementById("points").innerHTML) + 1;
+
+
+
+                //score
+                document.getElementById('scoreboard').innerHTML =
+                  parseInt(document.getElementById('scoreboard').innerHTML) + 1;
+                  //everytime an enemy is hit increase the score by 1
+                  score += 1
+                //every every 10 points increase the level 
+                if ((score % 10) == 0){
+                    level += 1
+                    alert(`YOU REACHED LEVEL ${level}`)  
+                    speed -= 100
+                    console.log(speed)
+                    console.log(level)
+                }
+                
+                if(level == 10){
+                    alert('YOU WIN!')
+                
+                    clearInterval(moveEnemies)//stop current enemy movement
+                    clearInterval(generateEnemy)//stop enemy spawn
+                    let button = document.createElement('button')
+                    button.textContent = ("PLAY AGAIN?")
+                    border.appendChild(button)
+                     button.addEventListener('click', ()=>{
+                    window.location.reload()
+                    replay()
+                     })
+                }
               }
-            }
+            
           }
 
 
@@ -66,16 +97,17 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+//generate enemy
 const generateEnemy = setInterval(()=>{
     const enemy = document.createElement('div')
     enemy.classList.add('enemy')
-    let enemyLeft = parseInt(window.getComputedStyle(enemy).getPropertyValue('left'));
+    //spawn randomly in multiples of 5only so they can be hit
     enemy.style.left = Math.floor(Math.random() * 136) * 5 + 'px'
 
 border.appendChild(enemy)
 },5000) ;
 
-
+//move enemies
 const moveEnemies =setInterval(()=>{
     enemies = document.getElementsByClassName('enemy')
     if(enemies!= undefined){
@@ -85,11 +117,27 @@ const moveEnemies =setInterval(()=>{
        enemy.style.top = enemyTop + 5 + 'px'
 
 
-
+//if enemy reaches the bottom of the screen the game is over
        if(enemyTop >= 520){
         alert('You Lose!')
-        clearInterval(moveEnemies)
+        clearInterval(moveEnemies)//stop enemy movement
+        clearInterval(generateEnemy)//stop enemy spawn
+        let button = document.createElement('button')
+        button.textContent = ("PLAY AGAIN?")
+        border.appendChild(button)
+        button.addEventListener('click', ()=>{
+            window.location.reload()
+            replay()
+        })
        }
       }
     }
-  },500) 
+  },speed) 
+
+}
+
+function replay(){
+playGame()
+}
+
+playGame()

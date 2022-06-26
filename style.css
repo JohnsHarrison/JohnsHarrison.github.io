@@ -42,3 +42,21 @@ overflow: hidden;
     background: url(images/arrow.png);
     background-size: 50px 50px;
 }
+
+button{
+    height: 50px;
+    width: 100px;
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    border-radius: 20px;
+    border-color: black;
+    background-color:  red;
+}
+
+#scoreboard{
+    color: white;
+    position: absolute;
+    left: 60px;
+    font-size: 50px;
+}
